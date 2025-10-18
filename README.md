@@ -21,53 +21,68 @@ A modern C++ deep learning framework focused on transparency, modularity, and in
 **Basic Scalar Autodiff**  
 *Build computation graphs intuitively with operator overloading (work-in-progress API):*
 ```cpp
-#include "neurocpp/autograd.hpp"
 
 int main() {
-    // Input variables (under active refactoring to Var API)
-    auto x = input(2.0);  // Current: mgr.input_node(2.0)
-    auto y = input(3.0);
-    
-    // Expressions with natural syntax
-    auto z = (x + y) * sin(x);  // Tape records: add → sin → mul
-    
-    backward(z);  // Propagate gradients backward
-    
-    std::cout << "dz/dx = " << grad(x) << "\n";  // ≈ -1.1712
-    std::cout << "dz/dy = " << grad(y) << "\n";  // ≈ 0.9093
+    Graph mgr;
+    mgr.init_manager();
+
+    Var x = mgr.variable(2.0);
+    Var y = mgr.variable(3.0);
+    Var z = (x + y) * sin(x);  // z = (x + y) * sin(x)
+
+    mgr.backward(z);
+
+    std::cout << "dz/dx = " << x.grad() << "\n";  // ≈ -1.1712
+    std::cout << "dz/dy = " << y.grad() << "\n";  // ≈  0.9093
 }
 ```
 **Gradient Based Optimization**
 ```cpp
-// Minimize f(x) = (x - 3)^2 using gradients
-auto x = input(0.0);  // Start at x=0
-for (int i = 0; i < 10; ++i) {
-    auto loss = square(x - 3.0);  // (x-3)^2
-    backward(loss);
-    
-    // Update: x = x - η * ∂loss/∂x
-    x.value() -= 0.1 * grad(x);  // η=0.1 (learning rate)
-    
-    std::cout << "x = " << x.value() << " | loss = " << loss.value() << "\n";
+int main() {
+    Graph mgr;
+    mgr.init_manager();
+
+    Var x = mgr.variable(0.0);  
+
+    const double learning_rate = 0.1;
+    for (int step = 0; step < 10; ++step) {
+        // f(x) = (x - 3)^2
+        Var loss = (x - 3.0) * (x - 3.0);
+
+        mgr.backward(loss);
+
+
+        double new_x_value = x.value() - learning_rate * x.grad();
+
+        
+        x = mgr.variable(new_x_value);
+
+        std::cout << "Step " << step << ": x = " << x.value()
+                  << ", loss = " << loss.value() << "\n";
+    }
 }
-/* Output:
-x = 0.6 | loss = 5.76
-x = 1.08 | loss = 3.6864
-... converges to x=3.0 */
 ```
 **Custom Derivative Calculation**
 ```cpp
-// Test: ∂/∂x [x² * sin(x)] at x=1.0
-auto x = input(1.0);
-auto z = square(x) * sin(x);
 
-backward(z);
-double numerical = grad(x);  // NeuroCPP's result
 
-// Analytical derivative: 2x·sin(x) + x²·cos(x)
-double analytical = 2*1.0*sin(1.0) + 1.0*1.0*cos(1.0);
+int main() {
+    Graph mgr;
+    mgr.init_manager();
 
-assert(std::abs(numerical - analytical) < 1e-6);  // ✅ Passes!
+    Var x = mgr.variable(1.5);
+    Var y = mgr.variable(0.8);
+    Var z = mgr.variable(2.0);
+
+    // L = exp(x*y) + log(z + 1) - sin(x)*cos(y) + (x - z)^2
+    Var L = exp(x * y) + log(z + 1.0) - sin(x) * cos(y) + (x - z) * (x - z);
+
+    mgr.backward(L);
+
+    std::cout << "dL/dx = " << x.grad() << "\n";
+    std::cout << "dL/dy = " << y.grad() << "\n";
+    std::cout << "dL/dz = " << z.grad() << "\n";
+}
 ```
 ---
 
