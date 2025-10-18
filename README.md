@@ -24,7 +24,7 @@ A modern C++ deep learning framework focused on transparency, modularity, and in
 
 int main() {
     Graph mgr;
-    mgr.init_manager();
+    mgr.init_graph();
 
     Var x = mgr.variable(2.0);
     Var y = mgr.variable(3.0);
@@ -40,7 +40,7 @@ int main() {
 ```cpp
 int main() {
     Graph mgr;
-    mgr.init_manager();
+    mgr.init_graph();
 
     Var x = mgr.variable(0.0);  
 
@@ -68,7 +68,7 @@ int main() {
 
 int main() {
     Graph mgr;
-    mgr.init_manager();
+    mgr.init_graph();
 
     Var x = mgr.variable(1.5);
     Var y = mgr.variable(0.8);
