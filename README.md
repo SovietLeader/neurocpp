@@ -92,12 +92,6 @@ assert(std::abs(numerical - analytical) < 1e-6);  // ✅ Passes!
 - **Interpretable**: Heatmaps for activation and gradient flow
 - **Portable**: Future GPU acceleration via OpenGL
 
----
-
-## 🛠 Building
-
-*Basic compilation example:*
-ВСТАВЬТЕ ПРИМЕР КОМПИЛЯЦИИ ЗДЕСЬ
 
 ---
 
