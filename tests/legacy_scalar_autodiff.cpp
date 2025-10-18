@@ -44,8 +44,8 @@ class Graph {
         double value = 0;
         double grad = 0;
         size_t index = 0;
-        unsigned int input0 = 0;
-        unsigned int input1 = 0;
+        size_t input0 = 0;
+        size_t input1 = 0;
         std::string op = "null";
     };
     /*
@@ -312,7 +312,7 @@ class Graph {
         const MulDerivatives result = just_derivative(operand1, operand2, op);
         return result;
     }
-    const Node& node_from_tape(size_t index) const {
+    [[nodiscard]]const Node& node_from_tape(const size_t index) const {
         return tape.at(index);
     }
 public:
@@ -321,7 +321,7 @@ public:
     // This node acts as a sentinel: input indices equal to 0 mean "no parent".
     // Safe to call multiple times (idempotent).
     void init_graph() {
-        if (tape.size() == 0) {
+        if (tape.empty()) {
             tape.push_back(nullNode);
         }
         else

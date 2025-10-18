@@ -125,3 +125,4 @@ Personal educational project — feedback and collaboration welcome!
 
 **Author**: Vladimir Ryzhkov  
 **License**: MIT
+

@@ -1,4 +1,16 @@
+# Build directories
 build/
-cmake-build-*
+cmake-build-*/
+
+# IDE
 .idea/
-.gitignore
+.vscode/
+
+# Compiled binaries
+*.out
+*.exe
+RedSprite
+
+# Object files
+*.o
+*.obj
