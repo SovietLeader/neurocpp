@@ -109,4 +109,4 @@ assert(std::abs(numerical - analytical) < 1e-6);  // ✅ Passes!
 Personal educational project — feedback and collaboration welcome!
 
 **Author**: Vladimir Ryzhkov  
-**License**: MIT (planned)
+**License**: MIT
