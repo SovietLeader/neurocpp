@@ -3,4 +3,5 @@ project(RedSprite)
 
 set(CMAKE_CXX_STANDARD 26)
 
-add_executable(RedSprite scalar_autograd.cpp)
+add_executable(RedSprite scalar_autograd.cpp
+        scalar_autograd.cpp)
